@@ -361,4 +361,30 @@ Final=np.vstack((SL1,SL2))
 print(Final) 
 # Op: [[ 4  5]
             #       [24 25]
-            #       [29 30]]
+
+            #       [29 30]]  
+
+
+
+
+
+# practice question
+# create a 5x5 matrix with values ranging from 1 to 25
+matrix = np.arange(1, 26).reshape(5, 5)
+# create numpy array 1 to 20
+A1to20=np.array(np.arange(1,21))
+print(A1to20)
+# reshape it to 4 into 5
+A1to20=A1to20.reshape(4,5)
+print(A1to20)
+# op :[[ 1  2  3  4  5]
+        # [ 6  7  8  9 10]  
+        # [11 12 13 14 15]
+        # [16 17 18 19 20]]
+
+# slice
+ # first 2 rows
+# last 2 columns
+new=A1to20[0:2,3:]
+print(new)
+
