@@ -1,5 +1,5 @@
 import pandas as pd
-
+##### for accessing data from csv file using pandas
 dt=pd.read_csv("people_data.csv")
 print(dt.columns)
 print(dt.head())
@@ -53,6 +53,7 @@ print(results.type) #accessing column named type
 print(results['type']) #accessing column named type
 results.index=results['discipline'] #changing index to discipline column if we want want more columns ['discipline':'place']
 print(results.head())
+
 
 
 
