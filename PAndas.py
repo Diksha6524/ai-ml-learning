@@ -53,6 +53,42 @@ print(results.type) #accessing column named type
 print(results['type']) #accessing column named type
 results.index=results['discipline'] #changing index to discipline column if we want want more columns ['discipline':'place']
 print(results.head())
+coffee=pd.read_csv("coffee.csv")
+print(coffee.head())
+#to make changes in og data of coffee
+coffee.loc[1,"Units Sold"]=10 #we can also use slice for the same ie for rows
+print(coffee.head())
+#at and iat
+print(coffee.at[1,"Day"])#accessing single value
+print(coffee.iat[4,1])#accessing single value by index
+#iloc and loc are used for multiple values,iat and at are used for single value
+print(coffee.Day)#or print(coffee['Day']),but u cant do coffee.Units Sold bcoz of space in the word
+print(coffee.Day.unique()) #gives unique values in day column
+print(coffee.nunique()) #gives number of unique values in each column
+print(coffee.sort_values("Units Sold")) #sorts data in ascending order
+print(coffee.sort_values("Units Sold",ascending=False)) #sorts data in descending order
+print(coffee.sort_values(["Units Sold","Coffee Type"],ascending=[0,1])) #sorts by Units sold in descending(decreasing order) and coffee type in ascending(by aplhabetical order)
+#for - itrating  through rows, loose performance
+for index,row in coffee.iterrows():
+    print(index)
+    print(row)# also add single row ie row['column name']
+    print("\n")
+    #or u can write like this
+# for index,row in coffee.iterrows():
+#    print(f"Index: {index}, Day: {row['Day']}, Coffee Type: {row['Coffee Type']}, Units Sold: {row['Units Sold']}")
+###filtering data
+bios=pd.read_csv("bios.csv")
+print(bios.head())
+print(bios.tail())
+#
+
+
+
+ 
+
+
+
+
 
 
 
