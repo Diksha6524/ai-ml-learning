@@ -227,6 +227,214 @@ print(new_coffee.head())
 print(coffee.head())# same output as new coffee bcoz both r pointing to same data in memory
 #to avoid this we use copy function
 new_coffee_copy=coffee.copy()
+new_coffee_copy['Discounted Price']=10
+print(new_coffee_copy.head())
+print(coffee.head())#og data remains same
+
+#new xcolumn
+coffee['revenue']=coffee['Units Sold']*coffee['Discounted Price']
+print(coffee.head())
+#chnage name  of the columns
+# #use dictionary for the same 
+coffee.rename(columns={'Discounted Price':'price'},inplace=True)#if we dont want to use inplace i can assign this whole statement to coffee again ie coffee=coffee.rename(....)
+print(coffee.head())
+
+#using bios if i wnt to get just firts anme form name column
+bios_new=bios.copy()
+bios_new['first_name']=bios['name'].str.split(' ').str[0]
+print(bios_new.head())
+print(bios_new.query('first_name =="Diksha"'))
+
+
+#for juts birth year from born_date column
+#use pd.to_datetime to convert string to datetime object
+bios_new['born_datetime']=pd.to_datetime(bios_new['born_date'])# here u might get errors therfore use  errors='coerce'
+#for format issue use format for the same ie format='%Y-%m-%d'
+print(bios_new.head())
+#for getting just year 
+bios_new['year']=bios_new['born_datetime'].dt.year
+#dt-> datetime accessor
+bios_new=bios_new[['name','year']]
+print(bios_new.head())
+
+
+####for dsaving the cahngesz in csv file
+bios_new.to_csv("bios_new.csv",index=False) #index=false to avoid extra index column
+
+
+#for diving hieght into categories
+bios['heights_cat']=bios['height_cm'].apply(lambda x: 'Short' if x<170 else ('Medium' if x<=185 else 'Tall') )
+print(bios.head())
+
+#function
+def cat_ath(row):
+    if (row['height_cm']<170) & (row['weight_kg']<70):
+        return 'lightwieght'
+    elif (row['height_cm']<=185) & (row['weight_kg']<=85):
+        return 'midweight'
+    else:
+        return 'heavyweight'
+bios['category']=bios.apply(cat_ath,axis=1) #axis=1 for row,axis=0 for column
+print(bios.head())
+
+
+#concatenation
+noc=pd.read_csv('noc_regions.csv')
+print(noc.head())
+
+
+#we can use joins 
+#left join-> all rows from left dataframe and matching rows from right dataframe
+#right join-> all rows from right dataframe and matching rows from left dataframe
+#inner join-> only matching rows from both dataframes
+#outer join-> all rows from both dataframes,non matching rows will have NaN values
+
+
+bios_merged=pd.merge(bios,noc,left_on='born_country',right_on='NOC',how='left')#as a reulst it give suffixes to both nocs's ie here its NOC_y and NOC_x
+#we can rename it using suffixes parameter
+# bios_merged=pd.merge(bios,noc,left_on='born_country',right_on='NOC',how='left',suffixes=['_bio','_noc'])
+print(bios_merged.head())
+bios_merged.rename(columns={'region':'born_region'},inplace=True)
+print(bios_merged.head())
+print(bios_merged['NOC_x'])
+# b=bios_merged[bios_merged['NOC_x'] !=bios_merged['born_region']][['name','born_country','NOC_x','born_region']]
+# print(b)
+
+#make seprate df based on country
+usa=bios[bios['born_country']=='USA'].copy()
+france=bios[bios['born_country']=='FRA'].copy()
+print(usa.head())
+print(france.head())
+
+#if i wanna make new df of just france and usa 
+usa_fra=pd.concat([usa,france])
+print(usa_fra.head()) #head we see all usa data firts
+print(usa_fra.tail())#tail we see all france data at last
+print(results.head())
+#merge = joins(),join data based on common columns
+#concat = appends(),stack data vertically doesnt match based on common columns
+#concat- syntax    pd.concat([df1,df2,...],axis=0 or 1) axis=0 for rows,axis=1 for columns
+#Horizontal concat-
+# pd.concat([df1, df2], axis=1)
+# df1 = pd.DataFrame({
+#     'id': [1, 2],
+#     'name': ['A', 'B']
+# })
+# df2 = pd.DataFrame({
+#     'id': [3, 4],
+#     'name': ['C', 'D']
+# })
+#    id name  id name
+# 0   1  A    3  C
+# 1   2  B    4  D
+
+#vertical concat-
+# pd.concat([df1, df2], axis=0)
+# df1 = pd.DataFrame({
+#     'id': [1, 2],
+#     'name': ['A', 'B']
+# })
+# df2 = pd.DataFrame({
+#     'id': [3, 4],
+#     'name': ['C', 'D']
+# })
+#    id name
+# 0   1  A
+# 1   2  B
+# 0   3  C
+# 1   4  D
+#mergre-combines df based on common columns
+#like sql joins
+#ex-
+#left=pd.DataFrame({
+#    'id': [1, 2, 3],   
+#    'name': ['A', 'B', 'C']
+#})
+#right=pd.DataFrame({
+#    'id': [2, 3, 4],
+#    'age': [30, 40]
+#})
+#pd.merge(left,right,on='id',how='inner')
+#   id name age
+#0  2  B   30
+#1  3  C   40
+#pd.merge(left,right,on='id',how='left')
+#   id name age
+#0  1  A   NaN
+#1  2  B   30
+#2  3  C   40             #left join- all rows from left df and matching rows from right df
+#pd.merge(left,right,on='id',how='right')
+#   id name age
+#0  2  B   30
+#1  3  C   40
+#2  4  NaN 40             #right join- all rows from right
+#pd.merge(left,right,on='id',how='outer')
+#   id name age
+#0  1  A   NaN
+#1  2  B   30
+#2  3  C   40
+#3  4  NaN 40             #outer join- all rows from both dfs
+#merge creates suffixes for common columns
+combined_df=pd.merge(results,bios,on='athlete_id',how='left')#left cuz we wall all rows from left df ir results
+print(combined_df.head())
+print(combined_df[['athlete_id','name','year','type']].head())
+print(combined_df.info())
+
+
+
+
+
+
+#handling NULL values
+print(coffee.head())
+null_val=coffee.loc[[1,3],'Units Sold']=np.nan
+print(coffee.head())
+#to see sum of nan's in each column
+print(coffee.isna().sum())
+
+
+
+
+#for nan values in specific columns we can fill it with some numbers or mean/median(as i hv learned in DWM)
+fill=coffee.fillna(10)
+print(fill)
+#mean
+fill_mean=coffee.fillna(coffee['Units Sold'].mean())
+print(fill_mean)
+#interpolate-> used for missing datas
+#it fills missing values  using existing patterns
+# dates = pd.date_range("2024-01-01", periods=5)
+# data = pd.Series([100, None, None, 160, 180], index=dates)
+# data.interpolate()
+# Output:
+# Copy code
+# 2024-01-01    100
+# 2024-01-02    120
+# 2024-01-03    140
+# 2024-01-04    160
+# 2024-01-05    180
+#fills missing values by estimating them from surrounding data points
+coffee.loc[[1],'Units Sold']=25
+coffee.loc[[2,3],'Units Sold']=np.nan
+print(coffee.head())
+# coffee['Units Sold']=coffee['Units Sold'].interpolate()
+# print(coffee)
+#we can drop nan rows too
+print(coffee.dropna())
+#we can use subset['column names']
+print(coffee.dropna(subset=['Units Sold']))
+#if i just wanna access rows with na values
+print(coffee[coffee['Units Sold'].isna()])
+#if i wanna access data with non na values
+print(coffee[coffee['Units Sold'].notna()])
+#if i hv to lter it permanently the (inplace=true)
+print(coffee.dropna(subset=['Units Sold'],inplace=True))
+print(coffee)
+
+
+
+
+
 
 
 
@@ -237,6 +445,7 @@ new_coffee_copy=coffee.copy()
 
 
  
+
 
 
 
