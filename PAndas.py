@@ -427,10 +427,164 @@ print(coffee.dropna(subset=['Units Sold']))
 print(coffee[coffee['Units Sold'].isna()])
 #if i wanna access data with non na values
 print(coffee[coffee['Units Sold'].notna()])
-#if i hv to lter it permanently the (inplace=true)
+#if i hv to alter it permanently the (inplace=true)
 print(coffee.dropna(subset=['Units Sold'],inplace=True))
 print(coffee)
 
+
+
+####DATA AGGREGATION
+#basicallu from many values we get one summarizedb value example mean
+
+
+#example i want to see which city has highest number of olympics winner
+bios_most=bios['born_city'].value_counts()
+print(bios_most)
+
+#if i only want  to see which region of usa has most winners
+bios_Usa=bios[bios['born_country']=='USA']['born_region'].value_counts()
+#i can get tail or head for the same
+print(bios_Usa.head(10)) #top 10
+#groupby
+print(coffee)
+#changing price of latte coffee
+# coffee.loc[coffee['Coffee Type']=='Latte','price']=6
+# #.loc[row_condition, column]
+# print(coffee)
+#sum
+cof_sum=coffee.groupby(['Coffee Type'])['Units Sold'].sum()
+print(cof_sum)
+#mean
+cof_mean=coffee.groupby(['Coffee Type'])['Units Sold'].mean()
+print(cof_mean)
+#agg
+coff_agg=coffee.groupby(['Coffee Type']).agg({'Units Sold':'sum','price':'mean'})
+print(coff_agg)
+print(coffee)
+
+coff_agg1=coffee.groupby(['Coffee Type','revenue']).agg({'Units Sold':'sum','price':'mean'})
+print(coff_agg1)
+
+#pivot-> converison on rows to columns
+  #example if i wanna get latte and espresso as columns
+print(coffee)
+pivot=coffee.pivot(columns='Coffee Type',index='Day', values='revenue')
+print(pivot)
+#output
+# Coffee Type  Espresso  Latte
+# Day
+# Friday          180.0  140.0
+# Monday          100.0   40.0
+# Saturday        180.0  140.0
+# Sunday          180.0  140.0
+# Thursday        160.0  120.0
+# Wednesday       140.0  100.0
+#if i want to grab mondays latte count 
+print(pivot.loc['Monday','Latte'])
+#sum
+print(pivot.sum())
+#axis=1 sum(axis=1 is for columns)
+print(pivot.sum(axis=1))
+print(bios.head)
+
+#in bios if i wanna group people with the year they born
+bios['born_date']=pd.to_datetime(bios['born_date'])
+bios_borny=bios.groupby(bios['born_date'].dt.year)['name'].count()
+print(bios_borny)
+#for indexing the same
+bios_bornyy=bios.groupby(bios['born_date'].dt.year)['name'].count().reset_index().sort_values('name',ascending=False)
+print(bios_bornyy)
+#month wise
+bios['month_born']=bios['born_date'].dt.month
+bios['year_born']=bios['born_date'].dt.year
+bios_grp=bios.groupby([bios['year_born'],bios['month_born']])['name'].count().reset_index().sort_values('name',ascending=False)
+print(bios_grp)
+
+
+
+
+#ADVANCD FUNCTIONALITY
+
+#SHIFT(),RANK(),ROLLING(),CUMSUM()
+
+#df.shift()
+
+coffee['yest']=coffee['revenue'].shift(1)#shift(1)-> movining data down by 1 row
+#example->
+# Index	revenue
+# 0	100
+# 1	120
+# 2	90
+# 3	150
+# coffee['revenue'].shift(1)
+# output
+# Index	yest
+# 0	NaN
+# 1	100
+# 2	120
+# 3	90
+
+# Code	Meaning
+# shift(1)	Previous row
+# shift(-1)	Next row
+# shift(7)	7 rows earlier
+# shift(30)	30 days earlier (time-series)
+print(coffee['yest'])
+print(coffee[['yest','Coffee Type','revenue']])
+coffee['pct_change']=coffee['revenue']/coffee['yest']
+print(coffee['pct_change'])
+
+#df.rank()-> assigns rank(positions) to values in column based on their order
+bios['height_rank']=bios['height_cm'].rank(ascending=False)
+print(bios.sort_values(['height_rank']))
+print(bios.sort_values(['height_rank']).sample(8))
+print(bios.sort_values(['height_rank'])[['height_rank','name']])
+
+#df.rolling()->Takes a fixed-size window
+# Moves it row by row
+# Computes statistics like mean, sum, max, min
+#1;21
+
+#lets see lasst 3 days revenue
+latte=coffee[coffee['Coffee Type']=='Latte'].copy()
+print(latte)
+
+latte['3days_revenue']=latte['revenue'].rolling(3).sum()
+print(latte[['3days_revenue','revenue','Coffee Type','Day']])
+
+
+#cumsum->cumulative sum
+# Adds values step by step
+# Keeps accumulating previous results
+#Each row = previous total + current value
+
+# Method	Task
+# cumsum()	Cumulative sum
+# cummax()	Running maximum
+# cummin()	Running minimum
+# cumprod()	Cumulative product
+print(coffee.head(2))
+coffee['cum_sum']=coffee['revenue'].cumsum()
+print(coffee[['Day','revenue','cum_sum']])
+
+
+#NEW FUNCTIONALITY
+print(pd.__version__) #2.2.3
+#PYARROW
+results_numpy=pd.read_csv('people_data.csv')
+results_arrow=pd.read_csv('people_data.csv',engine='pyarrow',dtype_backend='pyarrow')
+print(results_numpy.info())    
+print(results_arrow.info())  
+
+
+print(results_numpy['First Name'].str.contains('Lori'))
+print(results_arrow['First Name'].str.contains('Lori'))
+
+
+#ai stuff
+
+olympians_filter = bios[(bios['born_region'] == 'New Hampshire') | (bios['born_city'] == 'San Francisco')]
+print(olympians_filter.sample(4))
 
 
 
@@ -445,6 +599,7 @@ print(coffee)
 
 
  
+
 
 
 
