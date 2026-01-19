@@ -97,3 +97,60 @@ df['weight']=pd.to_numeric(df['weight'].str.strip(' kg'),errors='coerce')
 
 # print(df['Measurements'])#from this i can see some people hv na values and some just hv height 
 print(df.head)
+
+
+#parse out dates from born and died column
+date_pattern=r'(\d+ \w+ \d{4}|\d{4})'
+
+df['born_dates']=df['Born'].str.extract(date_pattern)
+df['born_dates']=pd.to_datetime(df['born_dates'],format='mixed',errors='coerce')
+#if i just want year or month i can do   df.born_dates.dt.month/year
+#we can use to_datetime()
+print(df.head(95))
+print(df[['born_dates','Born']]) 
+
+
+print(df['Died'])
+#asme we can do for die date
+df['Died_dates']=df['Died'].str.extract(date_pattern)
+df['Died_dates']=pd.to_datetime(df['Died_dates'],format='mixed',errors='coerce')
+
+print(df[['born_dates','Died_dates']])
+
+print(df.info())
+#if i just want year or month i can do   df.born_dates.dt.month/year
+
+
+
+
+#we can check first ig everything is in the same patter in born column ie like this ' 30 January 2002 in Serov, Sverdlovsk (RUS)    '
+# not_born_samepattren=df[~df['Born'].str.match(date_pattern,na=False)]#usde nego cuz we wanna ssee srows whch doesnt match the same pattern
+# print(not_born_samepattren.head(10))
+
+# not_born_samepattren2=df[~df['Born'].str.match(date_pattern,na=False) & df['Born'].notna() ] # gives same result but filter outs na rows
+# print(not_born_samepattren2.head(10))
+
+#get city,region and country for m the born column
+
+# loc_pattern=r'in ([\w\s-]+),([\w\s-]+)\+\((\w+)\)'
+# df['Born'].str.extract(loc_pattern) 
+
+
+#df[['Born_city','Born_region','Born_country']]=df['Born'].str.extract(loc_pattern,expand=True)
+# df['city']=df['Born'].str.extract(r)
+
+
+
+df['city'] = df['Born'].str.extract(r'in ([A-Za-z0-9\s]+),')
+df['country'] = df['Born'].str.extract(r'\((\w+)\)')
+df['region'] = df['Born'].str.extract(r',\s*([^()]+?)\s*\(')# here i used gpt
+
+print(df[['city','country']])
+print(df['region'].head(20))
+
+
+#use regex101 if confused and want soluion on more kind of examples
+
+#get rid of extra columns
+
+
