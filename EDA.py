@@ -161,6 +161,33 @@ print(final_df[final_df['Has Online delivery']=='Yes'].groupby('Country').size()
 
 
 
+#create a pie chart for cities distribution
+# print(final_df.columns)
+# city_name=final_df['City'].value_counts().index
+# City_values=final_df['City'].value_counts().values
+# plt.pie(City_values[:5],labels=city_name[:5],autopct='%.2f%%')
+# plt.show()
+
+#find top 10 cuisines
+cuisines=final_df['Cuisines'].value_counts().head(10)
+print(cuisines)
+#if we use .index we get string  ie labels
+#index is attribute not a function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -181,3 +208,4 @@ print(final_df[final_df['Has Online delivery']=='Yes'].groupby('Country').size()
 
 
 #now we hv to find relationshhipe of all this with differenet differenet countries
+
