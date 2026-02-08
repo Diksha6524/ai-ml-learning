@@ -92,5 +92,45 @@ df['Age']=df['Age'].map({'0-17':1,'18-25':2,'26-35':3,'36-45':4,'46-50':5,'51-55
 #for test we hv to do transfrm
 
 #City_category
-#1;21
+df_City=(pd.get_dummies(df['City_Category'],drop_first=True,dtype=int))
+print(df_City.head())
+#here we will concat it with aour og dataset
+df=pd.concat([df,df_City],axis=1)  #it will concat the two dataset columnwise
+print(df.head())
+#now we can drop city category column
+df.drop(['City_Category'], axis=1, inplace=True)#inplace=True means it will make changes in original dataset
+
+
+# We didn’t map because mapping creates a fake order.
+# We dropped the original column because one-hot columns already carry the city information correctly.
+
+
+# print(df['City_Category'].unique())
+#we can see that city category has 3 categories A,B,C
+#we will use label encoding for this
+# df['City_Category']=df['City_Category'].map({'A':1,'B':2,'C':3})
+# print(df['City_Category'].head())
+
+
+
+
+
+
+
+#missing values
+print(df.isnull().sum())
+#we can see that product category 2 and 3 have missing values even Purchase column has missing values in test dataset
+#purchase should hv null values cuz Purchase is what we are trying to predict.
+
+
+# Training data = questions with answers # u learn from it
+# Test data = questions without answers #u have to predict the answers
+# Train.csv → Purchase column filled
+# Test.csv → Purchase column empty
+
+#comapny doesnt kow future purchase amount so its missing in test data
+#so we will only deal with missing values in product category 2 and 3
+
+print(df['Purchase'].info())
+
 
