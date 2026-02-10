@@ -134,3 +134,130 @@ print(df.isnull().sum())
 print(df['Purchase'].info())
 
 
+#focusing on replacing missing values in product category 2 and 3
+print(df['Product_Category_2'].unique())
+#this will be a DISCRETE variable because it has only few unique values
+print(df['Product_Category_2'].value_counts())#vales count used for knowing the number of values are present for howmany times 
+#in discrete / categorical variable we can replace missing values with mode 
+#mode->most frequently occurring value in the column
+print(df['Product_Category_2'].mode()[0]) #it will give the mode value of product category 2
+#therefore mode is 8.0
+
+#now we will fillna
+df['Product_Category_2']=df['Product_Category_2'].fillna(df['Product_Category_2'].mode()[0])
+#we can check if values are filled or not
+print(df['Product_Category_2'].isnull().sum()) #it should give 0 if all null values are filled
+
+# df['Product_Category_3']=df['Product_Category_3'].fillna(df['Product_Category_3'].mode()[0])
+
+print(df['Product_Category_3'].unique())
+print(df['Product_Category_3'].mode()[0]) #it will give the mode value of product category 3
+df['Product_Category_3']=df['Product_Category_3'].fillna(df['Product_Category_3'].mode()[0])
+print(df['Product_Category_3'].isnull().sum()) #it should give 0
+
+
+
+#stay in current city years
+print(df['Stay_In_Current_City_Years'].unique())# output-> ['2' '4+' '3' '1' '0']
+# now we dont wnat that 4+ so we gonna  replace + with empty space
+df['Stay_In_Current_City_Years']=df['Stay_In_Current_City_Years'].str.replace('+'," ")
+print(df['Stay_In_Current_City_Years'].unique())# output   ['2' '4 ' '3' '1' '0']``
+
+print(df.info())
+#now we need to convert Stay_In_Current_City_Years into int cuz ognally its in obj
+df['Stay_In_Current_City_Years']=df['Stay_In_Current_City_Years'].astype('int')
+print(df.info())
+
+
+#visualization 
+#A pairplot is a plot that shows relationships between every pair of numerical features in a dataset at once.
+sns.barplot(x='Age',y='Purchase',hue='Gender',data=df)
+plt.show()
+# hue = an extra categorical variable used to split bars by color
+#observation->we can see that 26-35 age group has highest purchase amount and 0-17 age group has lowest purchase amount,also we can see that    male customers have higher purchase amount than female customers across all age groups. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Usually our multivariate EDA will be bivariate (looking at exactly
+# two variables), but occasionally it will involve three or more variables. It is almost
+# always a good idea to perform univariate EDA on each of the components of a
+# multivariate EDA before performing the multivariate EDA
+
+# The four types of EDA are univariate non-graphical, multivariate nongraphical, univariate graphical, and multivariate graphical.
+
+# UNIVARIATE NON-GRAPHICAL EDA 63
+# at single variables, then moves on to looking at multiple variables at once, mostly
+# to investigate the relationships between the variables.
+        #    Categorical data
+#                 categorical variable are simply the range of
+# values and the frequency (or relative frequency) of occurrence for each value
+#                      Categorical variables represent groups or labels. They describe a "quality" rather than a measurement. 
+             # Nominal Variables: Categories with no natural order. You can’t say one is "higher" than the other.
+# Examples: Eye color (Blue, Brown, Green), Country (USA, India, Brazil), Gender, or Marital Status.
+           # Ordinal Variables: Categories that have a defined order or rank, but the mathematical distance between them isn't consistent.
+# Examples: Satisfaction level (Poor, Fair, Good, Excellent), Education level (High School, Masters, PhD), or T-shirt size (S, M, L, XL). 
+
+
+# Numerical variables represent measurable quantities. You can perform math (adding, averaging) on these. 
+               # Discrete Variables: Countable values that are usually whole numbers. You cannot have "half" of a unit.Examples: Number of children in a family, number of cars in a parking lot, or number of clicks on a link.
+              # Continuous Variables: Values that can take any value within a range (including decimals). They are measured rather than counted.Examples: Height (\(175.5\) cm), Temperature (\(22.4\)°C), or Price (\(19.99\)). 
+
+
+
+
+# Types of Exploratory Data Analysis
+# There are various types of EDA based on nature of records
+# 1. Univariate Analysis->focuses on studying one variable to understand its characteristics.
+# Summary statistics like mean, median, mode, variance and standard deviation helps in describing the central tendency and spread of the data
+
+
+# 2. Bivariate Analysis->Bivariate Analysis focuses on identifying relationship between two variables to find connections, correlations and dependencies
+
+# 3. Multivariate Analysis
+# Multivariate Analysis identify relationships between two or more variables in the dataset and aims to understand how variables interact with one another which is important for statistical modeling techniques.
+
+
