@@ -179,6 +179,102 @@ plt.show()
 
 
 
+# # #visulaizatio n of purscahe wrt to occupation
+sns.barplot(x='Occupation',y='Purchase',hue='Gender',data=df)
+plt.show()
+# #observation->we can see that occupation 0 has highest purchase amount and occupation 20 has lowest purchase amount,also we can see that male customers have higher purchase amount than female customers across all occupation groups.
+print(df['Occupation'].unique())
+
+#now fro product category 2
+sns.barplot(x='Product_Category_2',y='Purchase',hue='Gender',data=df)
+plt.show()
+# #observation->we can see that product category 8 has highest purchase amount and product category 5 has lowest purchase amount,also we can see that male customers have higher purchase amount than female customers across all product category 2 groups.
+
+print(df.head())
+
+
+#now we can drop product_Id
+
+#now we ca split data ie test and train data
+
+#feature scailing
+
+df_test=df[df['Purchase'].isnull()]
+
+
+df_train=df[~df['Purchase'].isnull()]
+
+print(df_test['Purchase'].head())
+print(df_test['Purchase'].tail())
+
+
+print(df_train['Purchase'].head())
+print(df_train['Purchase'].tail())
+
+#train  test split
+
+#feature scailing
+
+          # In supervised learning:
+
+          # X = features (inputs)
+
+        #  y = target (what we want to predict) #Gender → feature
+
+                                                 # Age → feature
+
+                                                    # City_Category → feature
+
+                                                 # Purchase → target
+
+# X = df_train.drop('Purchase', axis=1)
+# y = df_train['Purchase'] optional way
+
+
+X=df_train.drop('Purchase',axis=1) #In supervised learning, X = features (inputs)  This is what my model will learn from.
+y=df_train['Purchase'] #In supervised learning, y = target variable                This is what my model should learn to predict.
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.33, random_state=42)
+
+X_train.drop('Product_ID',axis=1,inplace=True)
+X_test.drop('Product_ID',axis=1,inplace=True)
+
+
+#feature scailing-> it is a technique to standardize the range of independent variables or features of data. In data preprocessing, it is also known as normalization. The main purpose of feature scaling is to bring all the features to the same scale so that no feature dominates the other and it helps in faster convergence of the model.
+
+#scaling is done to bring all the features to the same scale so that no feature dominates the other and it helps in faster convergence of the model
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+
+#train ur model
+
+# Full Flow Summary
+
+# Separate X and y
+
+# Split into train & test
+
+# Remove useless columns
+
+# Scale training data
+
+# Scale test data using same scaler
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -261,3 +357,174 @@ plt.show()
 # Multivariate Analysis identify relationships between two or more variables in the dataset and aims to understand how variables interact with one another which is important for statistical modeling techniques.
 
 
+
+
+#from gpt -steps(imp steps in eda in data from data importing till data which is cleaned to train model)
+# 1️⃣ Import Libraries & Data
+# import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+
+# df = pd.read_csv('data.csv')
+
+# 2️⃣ Basic Data Understanding
+
+# Purpose: What does my data look like?
+
+# df.head()
+# df.tail()
+# df.shape
+# df.columns
+# df.info()
+# df.describe()
+
+
+# ✔ rows & columns
+# ✔ data types
+# ✔ numeric summary
+
+# 3️⃣ Identify Target & Features
+# X = df.drop('target', axis=1)
+# y = df['target']
+
+
+# Understand:
+
+# prediction type (regression / classification)
+
+# feature roles
+
+# 4️⃣ Check Missing Values
+# df.isnull().sum()
+# df.isnull().mean() * 100
+
+
+# Decide:
+
+# drop
+
+# fill (mean / median / mode)
+
+# domain-based fill
+
+# 5️⃣ Handle Missing Values
+# df['col'].fillna(df['col'].median(), inplace=True)
+# df.dropna(inplace=True)
+
+# 6️⃣ Feature Type Identification (VERY IMPORTANT)
+
+# Classify columns as:
+
+# Continuous
+
+# Discrete
+
+# Categorical
+
+# Ordinal
+
+# Datetime
+
+# This decides what preprocessing to apply.
+
+# 7️⃣ Handle Categorical Variables
+# pd.get_dummies(df, drop_first=True)
+
+
+# or
+
+# LabelEncoder / OneHotEncoder
+
+# 8️⃣ Outlier Detection
+# sns.boxplot(x=df['col'])
+# df['col'].quantile([0.01, 0.99])
+
+
+# Handle by:
+
+# capping
+
+# removing
+
+# transformation
+
+# 9️⃣ Univariate Analysis
+# sns.histplot(df['col'])
+# sns.countplot(x='category', data=df)
+
+
+# Understand distribution & skewness.
+
+# 🔟 Bivariate / Multivariate Analysis
+# sns.scatterplot(x='col1', y='col2', data=df)
+# sns.barplot(x='cat', y='target', data=df)
+# sns.heatmap(df.corr(), annot=True)
+
+
+# Find:
+
+# relationships
+
+# correlations
+
+# multicollinearity
+
+# 1️⃣1️⃣ Feature Engineering
+
+# Create new features:
+
+# df['total_price'] = df['units'] * df['price']
+# df['year'] = df['date'].dt.year
+
+
+# Drop useless ones:
+
+# df.drop(['id', 'name'], axis=1, inplace=True)
+
+# 1️⃣2️⃣ Scaling / Normalization
+# from sklearn.preprocessing import StandardScaler
+# scaler = StandardScaler()
+# df_scaled = scaler.fit_transform(df)
+
+
+# Needed for:
+
+# Linear models
+
+# KNN
+
+# SVM
+
+# Neural Networks
+
+# 1️⃣3️⃣ Train-Test Split
+# from sklearn.model_selection import train_test_split
+
+# X_train, X_test, y_train, y_test = train_test_split(
+#     X, y, test_size=0.2, random_state=42
+# )
+
+# 1️⃣4️⃣ Final Check (Model-Ready?)
+
+# ✔ No missing values
+# ✔ All numeric
+# ✔ No leakage
+# ✔ Scaled if required
+
+# X_train.info()
+
+# 🧠 One-Page Memory Flow (EXAM GOLD)
+# Import →
+# Understand →
+# Clean →
+# Analyze →
+# Engineer →
+# Encode →
+# Scale →
+# Split →
+# Model
+
+# One-line exam answer 💯
+
+# EDA involves understanding data structure, handling missing values and outliers, analyzing distributions and relationships, engineering features, encoding categorical variables, and preparing clean data for model training.
