@@ -217,3 +217,46 @@ big dataset comprssed to much smaller dataset:while lsoing as little info as pos
 
 
 # Regression model
+fitting a straight line to your data
+
+predicitng price of the house based on the size of the house
+
+# its called regression model cuz it predicts number
+
+
+# regression problem- any supervised learning model that predicts a number example liner regression
+
+inifite number of outputs
+
+
+
+
+# classification  model- predicts categories or discrete categories
+limited number /small number of possible outputs
+example if model identifying if given pic is cat or dog the n their are two possible outputs
+
+
+# NOTATIONS
+dataset used to train the mmodel is training set
+
+example is size in feets of house vs price in $
+
+if ur client wants to know  at what price their house can be sold
+
+we first train the model to learn from training set
+and then  model can predict the price of ur client's house
+
+
+x="input " variable feature or input feature
+example- x= size in feet of the house
+
+y='ouput 'variable/'target ' variable
+example- price of the house
+
+m=total number of training examples(number of rows)
+
+(x,y)=single training example
+
+(x^(i),y^(i))=for specific example(specific row)(ith trainung example)
+
+
