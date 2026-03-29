@@ -290,6 +290,8 @@ is the square root of the MSE. ​This is a popular evaluation metric because it
 RMSE=underroot of MSE
 
 
+
+
 4. R^2
 amount of variance in the dependent variable that the independent variable ​can explain. ​It is also called the coefficient of determination and measures the model's goodness of fit. 
 
@@ -304,6 +306,12 @@ R^2=summation |y(i)^hat-y^_(mean)|^2
 range 0 to 1
 0-badly fit model
 1-perfect model
+
+
+
+
+
+
 
 EXPLAINED VARIANCE AND R^2:
 ![alt text](image.png)
